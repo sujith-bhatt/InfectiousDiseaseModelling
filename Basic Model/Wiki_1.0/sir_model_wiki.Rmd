@@ -1,0 +1,193 @@
+---
+title: "Simple SIR Model"
+output: html_notebook
+---
+
+## Description:
+
+This is a simple SIR model, built using COVID-19 data extracted from Wikipedia ([link to source](https://en.wikipedia.org/w/index.php?title=Template:2019%E2%80%9320_Wuhan_coronavirus_data/China_medical_cases_by_province&oldid=941235662))
+
+```{r}
+# Loading required libraries (silently)
+
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(magrittr)
+  library(rvest)
+  library(xml2)
+  library(dplyr)
+  library(deSolve)
+  library(plotly)
+})
+```
+
+### Loading the dataset
+
+```{r}
+dat = read.csv("wiki_data.csv")
+dat
+```
+```{r}
+# retrieving data related to infections, recoveries and deaths
+
+infected = dat %>% select(!contains(c('_R', '_D')))
+recovered = dat %>% select(contains(c('date', '_R')))
+dead = dat %>% select(contains(c('date', '_D')))
+
+```
+
+### Data Analysis
+
+```{r}
+# cumulative infections over time
+inf_plot_dat = infected
+districts = colnames(inf_plot_dat)[-1]
+
+inf_plot_dat = inf_plot_dat %>% mutate_at(districts, cumsum)
+
+inf_plot = plot_ly()
+for(col in districts){
+  inf_plot = inf_plot %>% add_trace(x = inf_plot_dat[['date']], y = inf_plot_dat[[col]], name = col, type = 'scatter', mode = 'lines')
+}
+inf_plot = inf_plot %>% layout(title = 'Cumulative infections over time (days)', xaxis = list(title = 'Days'), yaxis = list(title = 'Number of people'))
+inf_plot
+```
+```{r}
+# cumulative recoveries over time
+rec_plot_dat = recovered
+districts = colnames(rec_plot_dat)[-1]
+
+rec_plot_dat = rec_plot_dat %>% mutate_at(districts, cumsum)
+
+rec_plot = plot_ly()
+for(col in districts){
+  rec_plot = rec_plot %>% add_trace(x = rec_plot_dat[['date']], y = rec_plot_dat[[col]], name = col, type = 'scatter', mode = 'lines')
+}
+rec_plot = rec_plot %>% layout(title = 'Cumulative recoveries over time (days)', xaxis = list(title = 'Days'), yaxis = list(title = 'Number of people'))
+rec_plot
+```
+
+```{r}
+# cumulative deaths over time
+dead_plot_dat = dead
+districts = colnames(dead_plot_dat)[-1]
+
+dead_plot_dat = dead_plot_dat %>% mutate_at(districts, cumsum)
+
+dead_plot = plot_ly()
+for(col in districts){
+  dead_plot = dead_plot %>% add_trace(x = dead_plot_dat[['date']], y = dead_plot_dat[[col]], name = col, type = 'scatter', mode = 'lines')
+}
+dead_plot = dead_plot %>% layout(title = 'Cumulative deaths over time (days)', xaxis = list(title = 'Days'), yaxis = list(title = 'Number of people'))
+dead_plot
+```
+
+#### Observations from the three graphs:
+  - The district of Hubei is the most affected district among the others, with over 37k confirmed cases and 1000+ deaths, with the city of Wuhan contributing to most cases.
+  - The number of cases, recoveries and deaths in the other districts is significantly lower than observed in Hubei. 
+
+
+
+### SIR Model
+
+```{r}
+#getting data for fitting SIR model
+
+sir_data = data.frame(time = 1:35)
+sir_data$I = rowSums(infected[, -c(1, 33:34)])
+sir_data$R = rowSums(recovered[, -1])
+
+sir_data
+```
+
+```{r}
+#plotting the infected population
+
+ggplot(data = sir_data) +
+    geom_point(aes(x = time, y = I)) +
+    labs(x = "Time (days)", y = "Number of infected people", title = 'Number of infected people over time') +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+```{r}
+# defining SIR model
+model_SIR <-function(time, state, parameters){
+  with(as.list(c(state, parameters)), {
+    
+    N = S+I+R
+    lambda = beta * (I/N)
+    
+    dS = -lambda*S
+    dI = lambda*S - gamma*I
+    dR = gamma*I
+    
+    return(list(c(dS, dI, dR)))
+  })
+}
+```
+
+```{r}
+# defining sum-of-squares error function
+SIR_SSE <- function(params, data){
+  result = as.data.frame(ode(y = initial_state_values,
+                             times = times,
+                             func = model_SIR,
+                             parms = params))
+  
+  delta = (result$I[result$time %in% data$time] - data$I)^2
+  SSE = sum(delta)
+  
+  return(SSE)
+}
+```
+
+```{r}
+# finding optimum beta and gamma values for the test population
+
+initial_state_values = c(S = 1000000-1, I = 1, R = 0)
+
+times = seq(from = 0, to = 60
+            , by = 0.1)
+
+optimised = optim(par = c(beta = 1, gamma = 0.5),
+                  fn = SIR_SSE,
+                  dat = sir_data)
+
+optimised$par
+```
+
+```{r}
+#plotting real vs. SIR model data
+opt_dat = as.data.frame(ode(y = initial_state_values,
+                             times = times,
+                             func = model_SIR,
+                             parms = optimised$par))
+
+plott = ggplot() 
+plott = plott + geom_point(aes(x = time, y = I),colour = 'red', data = sir_data)
+plott = plott + geom_line(aes(x = time, y = I), colour= 'blue', data = opt_dat)
+plott = plott + labs(x = "Time (days)", y = "Number of infected people", title = 'Number of infected people over time')
+plott
+```
+
+```{r}
+# calculating R0 value
+R0 = optimised$par['beta']/optimised$par['gamma']
+print(paste("The R0 value:", R0))
+```
+#### Observations from the graph and R0 value
+  - We can see that our SIR model peaks to 4000 infections after about 25 days.
+  - From the graph, it seems the disease is bought to a low with 50 to 60 days.
+  - The R0 value (basic reproduction number) is just over 1, which means that every infected person infects about 1.09 people on average. 
+  - As this is a closed world, without taking population change and other factors, we see that the disease dies down by 60 days. Those factors do have an impact in our model, if we include them.
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

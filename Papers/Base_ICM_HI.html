@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #20794d; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #20794d; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+  <!--radix_placeholder_meta_tags-->
+  <title>Simulating the Effects of Public Health Interventions on COVID-19 Transmission using a Simple SIR Model</title>
+
+  <meta property="description" itemprop="description" content="This is the second paper of several that examines the effect of various public health interventions on the local epidemic spread of COVID-19 infection using stochastic compartmental models implemented by the `EpiModel` library for R."/>
+
+
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2021-03-01"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-03-01"/>
+  <meta name="article:author" content="K Sujith Bhatt"/>
+
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="Simulating the Effects of Public Health Interventions on COVID-19 Transmission using a Simple SIR Model"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="This is the second paper of several that examines the effect of various public health interventions on the local epidemic spread of COVID-19 infection using stochastic compartmental models implemented by the `EpiModel` library for R."/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="Simulating the Effects of Public Health Interventions on COVID-19 Transmission using a Simple SIR Model"/>
+  <meta property="twitter:description" content="This is the second paper of several that examines the effect of various public health interventions on the local epidemic spread of COVID-19 infection using stochastic compartmental models implemented by the `EpiModel` library for R."/>
+
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","categories","author","date","output","draft","repository_url"]}},"value":[{"type":"character","attributes":{},"value":["Simulating the Effects of Public Health Interventions on COVID-19 Transmission using a Simple SIR Model"]},{"type":"character","attributes":{},"value":["This is the second paper of several that examines the effect of various public health interventions on the local epidemic spread of COVID-19 infection using stochastic compartmental models implemented by the `EpiModel` library for R.  \n"]},{"type":"character","attributes":{},"value":["R","COVID-19"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["K Sujith Bhatt"]},{"type":"character","attributes":{},"value":["ACM, National Institute of Technology Karnataka, Surathkal."]},{"type":"character","attributes":{},"value":["https://nitk.acm.org"]}]}]},{"type":"character","attributes":{},"value":["03-01-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth","self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]},{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["https://github.com/sujith-bhatt/InfectiousDiseaseModelling"]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["Base_ICM_HI_files/anchor-4.2.2/anchor.min.js","Base_ICM_HI_files/bowser-1.9.3/bowser.min.js","Base_ICM_HI_files/distill-2.2.21/template.v2.js","Base_ICM_HI_files/figure-html5/unnamed-chunk-10-1.png","Base_ICM_HI_files/figure-html5/unnamed-chunk-11-1.png","Base_ICM_HI_files/figure-html5/unnamed-chunk-12-1.png","Base_ICM_HI_files/figure-html5/unnamed-chunk-13-1.png","Base_ICM_HI_files/figure-html5/unnamed-chunk-14-1.png","Base_ICM_HI_files/figure-html5/unnamed-chunk-5-1.png","Base_ICM_HI_files/figure-html5/unnamed-chunk-6-1.png","Base_ICM_HI_files/figure-html5/unnamed-chunk-7-1.png","Base_ICM_HI_files/header-attrs-2.7/header-attrs.js","Base_ICM_HI_files/jquery-1.11.3/jquery.min.js","Base_ICM_HI_files/popper-2.6.0/popper.min.js","Base_ICM_HI_files/tippy-6.2.7/tippy-bundle.umd.min.js","Base_ICM_HI_files/tippy-6.2.7/tippy-light-border.css","Base_ICM_HI_files/tippy-6.2.7/tippy.css","Base_ICM_HI_files/tippy-6.2.7/tippy.umd.min.js","Base_ICM_HI_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+  <style type="text/css">
+
+  body {
+    background-color: white;
+  }
+
+  .pandoc-table {
+    width: 100%;
+  }
+
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
+
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
+
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
+
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+  }
+
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure img {
+    width: 100%;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
+
+  <script type="application/javascript">
+
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+
+  // show body when load is complete
+  function on_load_complete() {
+
+    // add anchors
+    if (window.anchors) {
+      window.anchors.options.placement = 'left';
+      window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+    }
+
+
+    // set body to visible
+    document.body.style.visibility = 'visible';
+
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+
+  function init_distill() {
+
+    init_common();
+
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-contents a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+
+      // capture layout
+      var layout = $(this).attr('data-layout');
+
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('details, div.sourceCode, pre, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+
+
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+
+    // remove code block used to force  highlighting css
+    $('.distill-force-highlighting-css').parent().remove();
+
+    // remove empty line numbers inserted by pandoc when using a
+    // custom syntax highlighting theme
+    $('code.sourceCode a:empty').remove();
+
+    // load distill framework
+    load_distill_framework();
+
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+
+      // article with toc class
+      $('.d-contents').parent().addClass('d-article-with-toc');
+
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+      // add orcid ids
+      $('.authors-affiliations').find('.author').each(function(i, el) {
+        var orcid_id = front_matter.authors[i].orcidID;
+        if (orcid_id) {
+          var a = $('<a></a>');
+          a.attr('href', 'https://orcid.org/' + orcid_id);
+          var img = $('<img></img>');
+          img.addClass('orcid-id');
+          img.attr('alt', 'ORCID ID');
+          img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+          a.append(img);
+          $(this).append(a);
+        }
+      });
+
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+
+      // remove d-appendix and d-footnote-list local styles
+      $('d-appendix > style:first-child').remove();
+      $('d-footnote-list > style:first-child').remove();
+
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+
+      // hoverable references
+      $('span.citation[data-cites]').each(function() {
+        var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+        window.tippy(this, {
+          allowHTML: true,
+          content: refHtml,
+          maxWidth: 500,
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        });
+      });
+
+      // clear polling timer
+      clearInterval(tid);
+
+      // show body now that everything is ready
+      on_load_complete();
+    }
+
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+
+  }
+
+  function init_downlevel() {
+
+    init_common();
+
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+
+    // remove toc
+    $('.d-contents').remove();
+
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+
+
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+
+    $('body').addClass('downlevel');
+
+    on_load_complete();
+  }
+
+
+  function init_common() {
+
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+
+      }
+    });
+
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      });
+    }
+
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+
+  </script>
+
+  <!--/radix_placeholder_distill-->
+  <script src="Base_ICM_HI_files/header-attrs-2.7/header-attrs.js"></script>
+  <script src="Base_ICM_HI_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="Base_ICM_HI_files/popper-2.6.0/popper.min.js"></script>
+  <link href="Base_ICM_HI_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="Base_ICM_HI_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="Base_ICM_HI_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="Base_ICM_HI_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="Base_ICM_HI_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="Base_ICM_HI_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="Base_ICM_HI_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Simulating the Effects of Public Health Interventions on COVID-19 Transmission using a Simple SIR Model","description":"This is the second paper of several that examines the effect of various public health interventions on the local epidemic spread of COVID-19 infection using stochastic compartmental models implemented by the `EpiModel` library for R.","authors":[{"author":"K Sujith Bhatt","authorURL":"#","affiliation":"ACM, National Institute of Technology Karnataka, Surathkal.","affiliationURL":"https://nitk.acm.org","orcidID":""}],"publishedDate":"2021-03-01T00:00:00.000+05:30","citationText":"Bhatt, 2021"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Simulating the Effects of Public Health Interventions on COVID-19 Transmission using a Simple SIR Model</h1>
+<!--radix_placeholder_categories-->
+<div class="dt-tags">
+<div class="dt=tag">R</div>
+<div class="dt=tag">COVID-19</div>
+</div>
+<!--/radix_placeholder_categories-->
+<p><p>This is the second paper of several that examines the effect of various public health interventions on the local epidemic spread of COVID-19 infection using stochastic compartmental models implemented by the <code>EpiModel</code> library for R.</p></p>
+</div>
+
+<div class="d-byline">
+  K Sujith Bhatt  (ACM, National Institute of Technology Karnataka, Surathkal.)<a href="https://nitk.acm.org" class="uri">https://nitk.acm.org</a>
+  
+<br/>03-01-2021
+</div>
+
+<div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#pre-amble">Pre-amble</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#types-of-epidemic-simulation-models">Types of Epidemic Simulation Models</a></li>
+<li><a href="#the-epimodel-package-for-r">The <code>EpiModel</code> Package for R</a>
+<ul>
+<li><a href="#setting-up-and-running-an-icm-sir-model">Setting up and running an ICM SIR model</a>
+<ul>
+<li><a href="#control.icm"><code>control.icm()</code></a></li>
+<li><a href="#init.icm"><code>init.icm()</code></a></li>
+<li><a href="#param.icm"><code>param.icm()</code></a></li>
+</ul></li>
+<li><a href="#exploring-public-health-interventions-using-our-icm-sir-model">Exploring public health interventions using our ICM SIR model</a>
+<ul>
+<li><a href="#avoiding-opportunities-for-exposure-through-social-distancing">Avoiding opportunities for exposure through <em>social distancing</em></a></li>
+<li><a href="#hygiene-measures-to-reduce-the-transmission-of-viral-particles">Hygiene measures to reduce the transmission of viral particles</a></li>
+<li><a href="#exploring-the-intervention-space">Exploring the intervention space</a></li>
+</ul></li>
+<li><a href="#does-simulation-size-matter">Does simulation size matter?</a></li>
+</ul></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</nav>
+</div>
+<h2 id="pre-amble">Pre-amble</h2>
+<p>This paper is the second of the few experiments done to simulate the COVID-19 outbreak as part of the co-curricular project undertaking for the Association for Computing Machinery, NITK Chapter.</p>
+<p>Please note that this paper has not been peer-reviewed, and that I claim no particular expertise in modeling communicable disease outbreaks.</p>
+<p>The full code is available from the GitHub repository: <a href="https://github.com/sujith-bhatt/InfectiousDiseaseModelling" class="uri">https://github.com/sujith-bhatt/InfectiousDiseaseModelling</a>.</p>
+<h1 id="introduction">Introduction</h1>
+<p>As the implications of the COVID-19 pandemic become apparent, and robust public health responses are now being put in place articles are appearing in the the mainstream media explaining the importance of such public health interventions in <em>flattening the curve</em>.</p>
+<p>In this paper, we will look at some simple simulations of COVID-19 spread in <code>R</code>, and use those simulations to illustrate why various public health interventions are employed.</p>
+<h1 id="types-of-epidemic-simulation-models">Types of Epidemic Simulation Models</h1>
+<p>In the earlier paper, we fitted an SIR <em>dynamic</em> compartmental model to COVID-19 incidence data for Hubei province in China.</p>
+<p>The basic idea behind the SIR model of communicable disease outbreaks is that there are three groups, or <em>compartments</em>, of people: those who are healthy but susceptible to the disease <span class="math inline">\(S\)</span>, the infectious (and thus, infected) <span class="math inline">\(I\)</span> and people who have recovered <span class="math inline">\(R\)</span>, with defined rates of transition or flow between these compartments:</p>
+<figure>
+<img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/SIR.PNG" alt="Source: wikipedia" /><figcaption aria-hidden="true">Source: wikipedia</figcaption>
+</figure>
+<p>To model the dynamics of the outbreak we need three differential equations, to describe the flows (rates of change) into and out of each compartment, parameterised by <span class="math inline">\(\beta\)</span> which controls the transition between <span class="math inline">\(S\)</span> and <span class="math inline">\(I\)</span> and <span class="math inline">\(\gamma\)</span> which controls the transition between <span class="math inline">\(I\)</span> and <span class="math inline">\(R\)</span>:</p>
+<p><span class="math display">\[\frac{dS}{dt} = - \frac{\beta I S}{N}\]</span></p>
+<p><span class="math display">\[\frac{dI}{dt} = \frac{\beta I S}{N}- \gamma I\]</span></p>
+<p><span class="math display">\[\frac{dR}{dt} = \gamma I\]</span></p>
+<p>We use calculus and linear algebra to find simultaneous solutions to these equations in simulated time, and we can use residual sum of squares (RSS) minimisation or maximum likelihood estimation (MLE) techniques to find the values of <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span> that best fit the observed incidence data.</p>
+<p>SIR models can be extended in various ways, such as the introduction of an exposed-but-not-yet-infectious compartment (the SEIR model), but as more compartments are introduced, the system of equations becomes more complex and unwieldy, and it is very difficult to model different behaviours in subpopulations (as as age groups).</p>
+<p>It is for this reason that stochastic compartmental models were developed. Stochastic models simulate individual members of a population, which allows the introduction of chance – for example, if an infected person coughs all over you, there is a probability that you will acquire their infection, not a certainty. Stochastic models make it relatively easy to specify, for example, different probabilities, or rather, draws from underlying probability distributions, for different classes of people eg by age group, or sex, or both, or current compartment. Typically the models are not so detailed as to simulate individual sneezes or coughs (agent-based micro-simulations can do that), but they can be made sufficiently sophisticated as to adequately model real-life scenarios. Such models can then be used to explore the effects of different types of public health interventions and policies through <em>what-if</em> analyses.</p>
+<h1 id="the-epimodel-package-for-r">The <code>EpiModel</code> Package for R</h1>
+<p>Here we will make use of the <a href="https://www.epimodel.org"><code>EpiModel</code></a> package<span class="citation" data-cites="jenness2018">[@jenness2018]</span>.</p>
+<p>The <code>EpiModel</code> package provides functions to specify:</p>
+<ul>
+<li>dynamic, continuous-time, compartment models (DCMs), as described above</li>
+<li>stochastic, discrete-time, individual contact models (ICMs)</li>
+<li>stochastic, discrete-time, network models</li>
+</ul>
+<p>Network models add the additional sophistication of modelling social networks, rather than assuming purely random mixing (and thus exposures) with the entire population. They were developed primarily to model the spread of HIV, but have been widely used to model other communicable diseases, including (other) sexually-transmitted diseases, ebola and even memes within social media networks.</p>
+<p>However, in this paper, we will use the simpler ICM models, partly because setting up the network models requires many more parameters to correctly specify the characteristics of social networks, and partly because the networks models are a lot more computationally intense and thus take a very long time to run.</p>
+<h2 id="setting-up-and-running-an-icm-sir-model">Setting up and running an ICM SIR model</h2>
+<p>In the first instance, ICM epidemic simulation models are run using the <code>icm()</code> function, which takes three arguments: a <code>param</code> list of model parameters created by the <code>param.icm()</code> function, an initial population of individuals, created by the <code>init.icm()</code> function, and a list of computation control parameters specified through the <code>control.icm()</code> function. Let’s look at each of those in turn in reverse order</p>
+<h3 id="control.icm"><code>control.icm()</code></h3>
+<p>The first thing we need to specify is the type of compartment model, with SI (susceptible-&gt;infected), SIR (susceptible-&gt;infected-&gt;recovered) and SIS (susceptible-&gt;infected-&gt;susceptible) models available by default, but extension models can readily be written.</p>
+<p>We also need to specify the number of time steps. As mentioned, ICMs are discrete-time models, and choice of an appropriate granularity for the time dimension matters. Here we’ll use whole days as the step size, but hourly or weekly or monthly steps are possible depending on the disease being modelled. The step time unit <em>per se</em> doesn’t need to be explicitly specified, but obviously the time unit affects the number of time steps to be simulated, via the <code>nsteps</code> parameter. Because stochastic models include chance, different results are expected each time the simulation is run. The idea is to run the simulation many times, and then take an average (mean or median) of the results, with percentiles calculated across the multiple simulation runs providing credible intervals for those averages. We specify the number of simulations to run via the <code>nsims</code> parameter.</p>
+<p>We’ll specify an SIR model, running for 100 days, with ten independent runs to be averaged.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Load EpiModel</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://www.epimodel.org/'>EpiModel</a></span><span class='op'>)</span>
+
+<span class='va'>control</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/EpiModel/man/control.icm.html'>control.icm</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"SIR"</span>, nsteps <span class='op'>=</span> <span class='fl'>100</span>, nsims <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h3 id="init.icm"><code>init.icm()</code></h3>
+<p>The simulated population of individuals is initialised via <code>init.icm()</code>. At minimum, we need to specify the number of people in each compartment at the beginning of the simulation. We can also specify distributions for other attributes for each person, such as age or sex, if we are using such attributes in extension models.</p>
+<p>We’ll specify a total population of 1,000, initially divided into 997 susceptible individuals, three infected individuals, and no-one in the recovered compartment.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>init</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/EpiModel/man/init.icm.html'>init.icm</a></span><span class='op'>(</span>s.num <span class='op'>=</span> <span class='fl'>997</span>, i.num <span class='op'>=</span> <span class='fl'>3</span>, r.num <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h3 id="param.icm"><code>param.icm()</code></h3>
+<p>Most importantly, we need to specify the rate at which susceptible individuals are exposed to potential infection – due to its roots in HIV epidemiology, this parameter is called <code>act.rate</code> in <code>EpiModel</code> – and the probability of infection at each occasion of exposure, called <code>inf.prob</code>. For the SIR model we also need to specify the rate at which infected individual recover. These rates are expressed as the mean probability of such transitions for each individual in the relevant compartment, say from infected to recovered, per unit of time (each day in this case).</p>
+<p>We can also specify demographic processes, including births or immigration, via the arrival rate parameter, <code>a.rate</code>, and deaths or emigration via departure rates, specific to each of the compartments, via the <code>ds.rate</code>, <code>di.rate</code> and <code>dr.rate</code> parameters.</p>
+<p>So, in the first instance, we’ll set the exposure-to-infection rate at 10 times per day, and the overall probability of infection across all those exposures at 0.05 – thus, only a 5% chance of actually being infected by each occasion of exposure to infection. That is probably realistic, given that many exposures are likely to be minimal, such as touching surfaces contaminated with virus, and only a few will be high-risk, such as being directly coughed or sneezed on by an infected individual. We’ll also set the recovery rate to 0.05, which will results in a mean time to recovery of about 20 days, but a median time to recover of about 14 days (because recovery for each infected individual is determined by random draws from a binomial distribution with mean set to the recovery rate).</p>
+<p>Let us consider a crude death rate of about 7 per 1,000 population per annum, so we’ll set the daily (individual) death rate in the susceptible and recovered compartments to (7/365)/1000, but we’ll make the daily death rate in the infected compartment double that, for now. We’ll set the arrival rate at 50% higher than the death rate, to reflect births and immigration.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>param</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/pkg/EpiModel/man/param.icm.html'>param.icm</a></span><span class='op'>(</span>inf.prob <span class='op'>=</span> <span class='fl'>0.05</span>, 
+                    act.rate <span class='op'>=</span> <span class='fl'>10</span>,
+                    rec.rate <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>20</span>,
+                    a.rate <span class='op'>=</span> <span class='op'>(</span><span class='fl'>10.5</span><span class='op'>/</span><span class='fl'>365</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>1000</span>, 
+                    ds.rate <span class='op'>=</span> <span class='op'>(</span><span class='fl'>7</span><span class='op'>/</span><span class='fl'>365</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>1000</span>, 
+                    di.rate <span class='op'>=</span> <span class='op'>(</span><span class='fl'>14</span><span class='op'>/</span><span class='fl'>365</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>1000</span>,
+                    dr.rate <span class='op'>=</span> <span class='op'>(</span><span class='fl'>7</span><span class='op'>/</span><span class='fl'>365</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>1000</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>OK, we can now run the simulation and print a description of the model results object.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/EpiModel/man/icm.html'>icm</a></span><span class='op'>(</span><span class='va'>param</span>, <span class='va'>init</span>, <span class='va'>control</span><span class='op'>)</span>
+
+<span class='va'>sim</span>
+</code></pre>
+</div>
+<pre><code>EpiModel Simulation
+=======================
+Model class: icm
+
+Simulation Summary
+-----------------------
+Model type: SIR
+No. simulations: 10
+No. time steps: 100
+No. groups: 1
+
+Model Parameters
+-----------------------
+inf.prob = 0.05
+act.rate = 10
+rec.rate = 0.05
+a.rate = 2.876712e-05
+ds.rate = 1.917808e-05
+di.rate = 3.835616e-05
+dr.rate = 1.917808e-05
+
+Model Output
+-----------------------
+Variables: s.num i.num num r.num si.flow ir.flow ds.flow 
+di.flow dr.flow a.flow</code></pre>
+</div>
+<p><code>EpiModel</code> provides convenient default plotting methods for model objects. The default plot gives the number of individuals in each of the S. I and R compartments at each time point (each day, in this simulation) – that is, the size of the I compartment gives the point prevalence of the disease, in epidemiological parlance.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>sim</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Base_ICM_HI_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<p>We can also plot the flows. <code>si.flow</code> is the incidence (count of new cases per day).</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>sim</span>, y <span class='op'>=</span> <span class='st'>"si.flow"</span>, mean.col<span class='op'>=</span><span class='st'>"red"</span>, qnts.col<span class='op'>=</span><span class='st'>"red"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Base_ICM_HI_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<p>Notice that the number of infected individuals climbs rapidly in the first two weeks. Is that realistic? Well, we can check that by calculating the basic reproduction number, <span class="math inline">\(R_{0}\)</span>, for the growth phase of the epidemic curve. Conveniently, the <code>EpiModel</code> library provides a method for extracting data frames containing averages from each of the simulation results contained in the model results object.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="Base_ICM_HI_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+</div>
+<p>A MLE estimate of <span class="math inline">\(R_{0}\)</span> of 2.9 is consistent with current WHO estimates of the COVID-19 basic reproduction number (during the peak), so our initial set of parameters are consistent with reality. On that basis, and despite the simplifications inherent in our model, we can start to use it to explore the effects of various public health interventions.</p>
+<h2 id="exploring-public-health-interventions-using-our-icm-sir-model">Exploring public health interventions using our ICM SIR model</h2>
+<h3 id="avoiding-opportunities-for-exposure-through-social-distancing">Avoiding opportunities for exposure through <em>social distancing</em></h3>
+<p>One of key public health measures is <em>social distancing</em>. As <a href="https://en.wikipedia.org/wiki/Social_distancing">wikipedia says</a>:</p>
+<blockquote>
+<p>Social distancing is a term applied to certain non-pharmaceutical infection control actions that are taken by public health officials to stop or slow down the spread of a highly contagious disease. The objective of social distancing is to reduce the probability of contact between persons carrying an infection, and others who are not infected, so as to minimize disease transmission, morbidity and ultimately, mortality.</p>
+</blockquote>
+<p>We can, naïvely for now, model increased social distancing by simply reducing the average number of exposures (“acts” in EpiModel nomenclature) per day. We’ll explore simulations using 10, 5 and 2 (mean) exposures per day. Such exposure rates apply to everyone in our simulated population.</p>
+<h3 id="hygiene-measures-to-reduce-the-transmission-of-viral-particles">Hygiene measures to reduce the transmission of viral particles</h3>
+<p>The other main set of public health measures involve adoption of hygiene measures to reduce the transmission of viral particles between individuals, or from individuals to other surfaces and then to other individuals, such as:</p>
+<ul>
+<li>wearing surgical masks if you are ill or coughing or sneezing<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>frequent hand-washing and use of alcohol-based hand sanitisers</li>
+<li>not touching your face, mouth, nose or eyes, to avoid transferring virus to your nasopharynx and thence to your respiratory tract</li>
+<li>frequent cleaning or disinfection of <a href="https://en.wikipedia.org/wiki/Fomite"><em>fomites</em></a></li>
+</ul>
+<p>We can simulate such hygiene measures in our model by adjusting the probability of infection (at each occasion of exposure). We’ll explore simulations using probabilities of infection at each exposure of 0.05, 0.025 and 0.01 – that is 5%, 2.5% and 1%.</p>
+<h3 id="exploring-the-intervention-space">Exploring the intervention space</h3>
+<p>Let’s wrap all this up into a function that will run our SIR simulation while stepping through three levels of values for each of our two “intervention levers”, the mean number of exposures per day, <code>act.rate</code>, and the probability of infection at each exposure, <code>inf.prob</code>. We’ll collect the results of interest in a tidy dataframe to facilitate visualisation and other reporting.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>run_sir_sim</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>inf_prob</span>, <span class='va'>act_rate</span>, <span class='va'>pop_size</span><span class='op'>=</span><span class='fl'>1000</span>, <span class='va'>i_num</span><span class='op'>=</span><span class='fl'>3</span>,
+                        <span class='va'>n_steps</span><span class='op'>=</span><span class='fl'>365</span>, <span class='va'>n_sims</span><span class='op'>=</span><span class='fl'>10</span>, 
+                        <span class='va'>si_mean</span><span class='op'>=</span><span class='fl'>7.5</span>, <span class='va'>si_sd</span><span class='op'>=</span><span class='fl'>3.4</span><span class='op'>)</span> <span class='op'>{</span>
+
+    <span class='co'># set up simulation parameters</span>
+  <span class='va'>param</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/pkg/EpiModel/man/param.icm.html'>param.icm</a></span><span class='op'>(</span>inf.prob <span class='op'>=</span> <span class='va'>inf_prob</span>, 
+                      act.rate <span class='op'>=</span> <span class='va'>act_rate</span>,
+                  rec.rate <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>20</span>,
+                  a.rate <span class='op'>=</span> <span class='op'>(</span><span class='fl'>10.5</span><span class='op'>/</span><span class='fl'>365</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>1000</span>, 
+                  ds.rate <span class='op'>=</span> <span class='op'>(</span><span class='fl'>7</span><span class='op'>/</span><span class='fl'>365</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>1000</span>, 
+                  di.rate <span class='op'>=</span> <span class='op'>(</span><span class='fl'>14</span><span class='op'>/</span><span class='fl'>365</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>1000</span>,
+                  dr.rate <span class='op'>=</span> <span class='op'>(</span><span class='fl'>7</span><span class='op'>/</span><span class='fl'>365</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>1000</span><span class='op'>)</span>
+  <span class='va'>init</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/EpiModel/man/init.icm.html'>init.icm</a></span><span class='op'>(</span>s.num <span class='op'>=</span> <span class='va'>pop_size</span> <span class='op'>-</span> <span class='va'>i_num</span>, i.num <span class='op'>=</span> <span class='va'>i_num</span>, r.num <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='va'>control</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/EpiModel/man/control.icm.html'>control.icm</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"SIR"</span>, nsteps <span class='op'>=</span> <span class='va'>n_steps</span>, nsims <span class='op'>=</span> <span class='va'>n_sims</span><span class='op'>)</span>
+
+  <span class='co'># run the simulation</span>
+  <span class='va'>sim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/EpiModel/man/icm.html'>icm</a></span><span class='op'>(</span><span class='va'>param</span>, <span class='va'>init</span>, <span class='va'>control</span><span class='op'>)</span>
+  
+  <span class='co'># collect the relevant results in a data frame</span>
+  <span class='va'>incidence_rates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>sim</span>, out<span class='op'>=</span><span class='st'>"mean"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+                        <span class='fu'>select</span><span class='op'>(</span><span class='va'>time</span>, <span class='va'>si.flow</span>, <span class='va'>i.num</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+                        <span class='fu'>mutate</span><span class='op'>(</span>act_rate<span class='op'>=</span><span class='va'>act_rate</span>,
+                               inf_prob<span class='op'>=</span><span class='va'>inf_prob</span>,
+                               total_cases<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>si.flow</span><span class='op'>)</span>,
+                               max_prev<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>i.num</span>, na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># use the data frame of results to create an incidence() object</span>
+  <span class='va'>incidence_rates</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>time</span> <span class='op'>&lt;=</span> <span class='fl'>300</span>,
+           <span class='va'>act.rate</span> <span class='op'>==</span> <span class='va'>act_rate</span>,
+           <span class='va'>inf.prob</span> <span class='op'>==</span> <span class='va'>inf_prob</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>select</span><span class='op'>(</span><span class='va'>time</span>, <span class='va'>si.flow</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>uncount</span><span class='op'>(</span><span class='va'>si.flow</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>pull</span><span class='op'>(</span><span class='va'>time</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>local_case_dates</span>
+
+    <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>local_case_dates</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>{</span>
+    
+      <span class='va'>local_case_dates</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>incidence</span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>local_cases</span>
+  
+      <span class='co'># find the incidence peak from the incidence object  </span>
+      <span class='va'>peaky_blinder</span> <span class='op'>&lt;-</span> <span class='fu'>find_peak</span><span class='op'>(</span><span class='va'>local_cases</span><span class='op'>)</span>
+  
+      <span class='co'># recreate the incidence object using data only up to the peak  </span>
+      <span class='va'>incidence_rates</span> <span class='op'>%&gt;%</span>
+      <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>time</span> <span class='op'>&lt;=</span> <span class='va'>peaky_blinder</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>select</span><span class='op'>(</span><span class='va'>time</span>, <span class='va'>si.flow</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>uncount</span><span class='op'>(</span><span class='va'>si.flow</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>pull</span><span class='op'>(</span><span class='va'>time</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>local_growth_phase_case_dates</span>
+    
+      <span class='va'>local_growth_phase_case_dates</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>incidence</span><span class='op'>(</span><span class='va'>.</span>, last_date<span class='op'>=</span><span class='va'>peaky_blinder</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>local_growth_phase_cases</span>
+  
+      <span class='co'># get a MLE estimate of the basic reproduction number, R0    </span>
+      <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>get_R</span><span class='op'>(</span><span class='va'>local_growth_phase_cases</span>, si_mean <span class='op'>=</span> <span class='va'>si_mean</span>, si_sd <span class='op'>=</span> <span class='va'>si_sd</span><span class='op'>)</span>
+  
+      <span class='co'># add that as a column to the data frame of results    </span>
+      <span class='va'>incidence_rates</span> <span class='op'>&lt;-</span> <span class='va'>incidence_rates</span> <span class='op'>%&gt;%</span>
+                            <span class='fu'>mutate</span><span class='op'>(</span>mle_R0 <span class='op'>=</span> <span class='va'>res</span><span class='op'>$</span><span class='va'>R_ml</span><span class='op'>)</span>
+    <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>{</span> 
+      <span class='co'># can't calculate R0 so just set to NA</span>
+      <span class='va'>incidence_rates</span> <span class='op'>&lt;-</span> <span class='va'>incidence_rates</span> <span class='op'>%&gt;%</span>
+                            <span class='fu'>mutate</span><span class='op'>(</span>mle_R0 <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
+    <span class='op'>}</span>
+    <span class='co'># return the data frame (which has just one row)</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>incidence_rates</span><span class='op'>)</span>
+<span class='op'>}</span> <span class='co'># end function definition</span>
+</code></pre>
+</div>
+</div>
+<p>Now we can run our simulation function in a loop, stepping through the levels of our two “public health intervention” parameters, and collect the results in a data frame.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># set up an empty data frame to which to append </span>
+<span class='co'># results from each simulation </span>
+<span class='va'>sims_incidence_rates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>time<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+                          si.flow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+                          i.num<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+                          act_rate<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+                          inf_prob<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+                          total_cases<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+                          max_prev<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+                          mle_R0<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># the parameters to step through</span>
+<span class='va'>act.rates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>5</span>, <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>inf.probs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.025</span>, <span class='fl'>0.01</span><span class='op'>)</span>
+
+<span class='co'># loop through the parameter space</span>
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>act.rate</span> <span class='kw'>in</span> <span class='va'>act.rates</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='kw'>for</span> <span class='op'>(</span><span class='va'>inf.prob</span> <span class='kw'>in</span> <span class='va'>inf.probs</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>sims_incidence_rates</span> <span class='op'>&lt;-</span> <span class='va'>sims_incidence_rates</span> <span class='op'>%&gt;%</span>
+                        <span class='fu'>bind_rows</span><span class='op'>(</span><span class='fu'>run_sir_sim</span><span class='op'>(</span><span class='va'>inf.prob</span>, <span class='va'>act.rate</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<p>OK, now we can visualise the results. First let’s look at the daily incidence (number of new cases per day):</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># create facet columns as descending ordered factors</span>
+<span class='va'>sims_incidence_rates</span> <span class='op'>&lt;-</span> <span class='va'>sims_incidence_rates</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>act_rate_facet_label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>act_rate</span>, <span class='st'>"exposures per day"</span><span class='op'>)</span>,
+         inf_prob_facet_label <span class='op'>=</span> 
+           <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Probability of infection\nat each exposure:"</span>,<span class='va'>inf_prob</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>arrange</span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>act_rate</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>mutate_at</span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='va'>act_rate_facet_label</span><span class='op'>)</span>, <span class='fu'>funs</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>.</span>, levels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>  
+  <span class='fu'>arrange</span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>inf_prob</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>mutate_at</span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='va'>inf_prob_facet_label</span><span class='op'>)</span>, <span class='fu'>funs</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>.</span>, levels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>arrange</span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>act_rate</span><span class='op'>)</span>, <span class='fu'>desc</span><span class='op'>(</span><span class='va'>inf_prob</span><span class='op'>)</span>, <span class='va'>time</span><span class='op'>)</span>
+
+<span class='co'># add annotation text for each facet</span>
+<span class='va'>sims_incidence_rates_facet_annotations</span> <span class='op'>&lt;-</span> <span class='va'>sims_incidence_rates</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>label<span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"R0 ="</span>, <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='va'>mle_R0</span>, digits <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>,
+                      <span class='st'>"\n"</span>,  <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>*</span><span class='va'>total_cases</span><span class='op'>/</span><span class='fl'>1000</span>, digits <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>,
+                      <span class='st'>"% of population infected"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>inf_prob_facet_label</span>, <span class='va'>act_rate_facet_label</span>, <span class='va'>label</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>distinct</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>sims_incidence_rates</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>time</span> <span class='op'>&lt;=</span> <span class='fl'>365</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>time</span>, y<span class='op'>=</span><span class='va'>si.flow</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span>colour<span class='op'>=</span><span class='st'>"blue"</span>, size<span class='op'>=</span><span class='fl'>1.5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span><span class='op'>(</span><span class='va'>inf_prob_facet_label</span> <span class='op'>~</span> <span class='va'>act_rate_facet_label</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='va'>sims_incidence_rates_facet_annotations</span>,
+            mapping<span class='op'>=</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>50</span>, 
+                        y <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>sims_incidence_rates</span><span class='op'>$</span><span class='va'>si.flow</span>, na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>,
+                        label <span class='op'>=</span> <span class='va'>label</span><span class='op'>)</span>, parse<span class='op'>=</span><span class='cn'>FALSE</span>,
+            hjust   <span class='op'>=</span> <span class='fl'>0</span>, vjust   <span class='op'>=</span> <span class='fl'>0</span>, size<span class='op'>=</span><span class='fl'>3</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='st'>"Days since start of epidemic"</span>, y<span class='op'>=</span><span class='st'>"New cases per day"</span>,
+       title<span class='op'>=</span><span class='st'>"Modelling of new cases of COVID-19 per day: incidence rate"</span>,
+       subtitle<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"with varying levels of social mixing (exposures per day)"</span>,
+                      <span class='st'>"and probabilities of infection at each exposure"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"top"</span>, 
+          strip.text <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>size<span class='op'>=</span><span class='fl'>14</span><span class='op'>)</span><span class='op'>)</span> 
+</code></pre>
+</div>
+<p><img src="Base_ICM_HI_files/figure-html5/unnamed-chunk-10-1.png" width="960" /></p>
+</div>
+<p>Notice that as we decrease the average number of exposures per day to infected people, from left-to-right, and decrease the risk of becoming infected at each of those exposures, from top-to-bottom, the epidemic curve is flattened. Not only is it spread out over a longer period of time, the total area under the curve, which gives the total number of people in our population who are infected, is reduced.</p>
+<p>By flattening the epidemic curve – that is, the number of new cases per day curve – we give health services a chance to cope with the influx of patients without being overwhelmed. Being overwhelmed means very sick cases will miss out on scarce resources such as ventilators, ECMO machines and antiviral drugs, and thus people unnecessarily die.</p>
+<p>That’s why social distancing, self-isolation, hand washing and so on all matter so much.</p>
+<p>We see the same pattern if we look at the prevalent cases (number of people who have COVID-19 at each point in time):</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="Base_ICM_HI_files/figure-html5/unnamed-chunk-11-1.png" width="960" /></p>
+</div>
+<p>An alternative visualisation puts all the incidence curves on one panel:</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="Base_ICM_HI_files/figure-html5/unnamed-chunk-12-1.png" width="960" /></p>
+</div>
+<p>Perhaps this is the most effective visualisation, using the <code>ggridges</code> extension to the <code>ggplot2</code>? It orders the various combinations of levels of social distancing and hygiene measures by the maximum daily prevalence of cases (the number of currently infected people at each point in time), since it is that which we want to reduce to a point where the health services can cope.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://wilkelab.org/ggridges/'>ggridges</a></span><span class='op'>)</span>
+
+<span class='co'># create one column for both intervention parameters</span>
+<span class='va'>sims_incidence_rates</span> <span class='op'>&lt;-</span> <span class='va'>sims_incidence_rates</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>intervention_level_label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>act_rate</span>,
+                                          <span class='st'>"exp/day,"</span>,
+                                          <span class='va'>inf_prob</span><span class='op'>*</span><span class='fl'>100</span>,
+                                          <span class='st'>"% inf risk/exp"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>arrange</span><span class='op'>(</span><span class='va'>max_prev</span>, <span class='va'>time</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>mutate_at</span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='va'>intervention_level_label</span><span class='op'>)</span>, <span class='fu'>funs</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>.</span>, levels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span>, ordered<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>sims_incidence_rates</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>time</span> <span class='op'>&lt;=</span> <span class='fl'>365</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>time</span>, y<span class='op'>=</span><span class='va'>intervention_level_label</span>, height<span class='op'>=</span><span class='va'>i.num</span>, fill<span class='op'>=</span><span class='va'>intervention_level_label</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='op'>(</span>stat<span class='op'>=</span><span class='st'>"identity"</span>, show.legend<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='st'>"Days since start of epidemic"</span>, y<span class='op'>=</span><span class='st'>"Prevalent (current number of active) cases"</span>,
+       title<span class='op'>=</span><span class='st'>"Modelling of COVID-19 transmission in 1,000 simulated people"</span>,
+       subtitle<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"with varying levels of social mixing (exposures per day)"</span>,
+                      <span class='st'>"and risk of infection at each exposure,\n"</span>,
+                      <span class='st'>"ordered by descending maximum number of prevalent cases per day"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"top"</span>, 
+          strip.text <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>size<span class='op'>=</span><span class='fl'>12</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_brewer.html'>scale_fill_brewer</a></span><span class='op'>(</span>type<span class='op'>=</span><span class='st'>"seq"</span>, palette<span class='op'>=</span><span class='st'>"Oranges"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Base_ICM_HI_files/figure-html5/unnamed-chunk-13-1.png" width="960" data-distill-preview=1 /></p>
+</div>
+<h2 id="does-simulation-size-matter">Does simulation size matter?</h2>
+<p>So far we have only simulated an outbreak in a population of 1,000 people. What happens if we scale that up? Are the results scale-independent? Let’s find out by re-running the simulations, but with a population size of 10,000 people, one order of magnitude larger. All other parameters will be the same, including the use of three infected people at the start.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="Base_ICM_HI_files/figure-html5/unnamed-chunk-14-1.png" width="960" /></p>
+</div>
+<p>Comparing the two simulations, we can see that the effects of the varying levels of the interventions have broadly similar effects in both small (1k) and larger (10k) populations, although the spread not unexpectedly takes longer in the larger population, particularly at the higher levels of social distancing (fewer exposures per day) and at the higher hygiene levels (lower probabilities of infection if exposed).</p>
+<p>How large should our simulated population be, given that our model implements random mixing between everyone in the population? In reality, you may live in a city of several million people, but you are unlikely to ever come in contact with all of them. Over the course of a year, contact (including passing, casual contact in crowds etc) with perhaps a few thousand or tens of thousands of people seems likely, and thus using models with populations of 10,000 or 20,000 would appear to be a reasonable approximation to reality.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>So far, we have seen how to simulate an outbreak using a stochastic, discrete-time, individual contact model (ICM) with three (SIR) compartments, and how we can very approximately simulate the effects of different levels of the two main classes of public health interventions for such an outbreak.</p>
+<p>Based on our simple SIR model, we have determined that reducing either the exposure rate by social distancing (including self-isolation and/or formal quarantine), or the probability of infection via simple hygiene methods can have a dramatic impact on the rate at which new infections occur, and the total number of infections. And that both measures used together are even more effective. Most importantly, the public health measures spread out the epidemic, thus lowering the peak of the epidemic curve, allowing hospital and other health care services to cope with the influx of patients.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>Surgical masks only help in keeping virus-laden droplets in, not keeping viral particles out. Properly-fitted N95 masks are partially effective in keeping viral particles out. Positive-pressure hoods with filtered air supplies are very effective in keeping viral particles out, but are usually only used in high-risk health care settings.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom">
+<h3 id="updates-and-corrections">Corrections</h3>
+<p>If you see mistakes or want to suggest changes, please <a href="https://github.com/sujith-bhatt/InfectiousDiseaseModelling/issues/new">create an issue</a> on the source repository.</p>
+</div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>

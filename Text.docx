@@ -1,0 +1,86 @@
+I have a usecase in my company where we are using a third party vendor for transcription of customer center calls. The transcription service being provided offers Phonetic Boosting services (give a list of phrases or words to improve model performance). My job is to plan out, from a process perspective, how to identify the right words/phrases to be boosted, what is the frequency at which this process of identifying of words/phrases needs to be done, a reusable pipeline to go through with the process, how to evaluate the difference pre and post boost. give me a detailed plan
+
+To implement and continuously improve a phonetic boosting process for your call center transcription use case, here is a step-by-step plan covering identification, pipeline setup, iteration frequency, and impact evaluation.
+
+### Identifying Words and Phrases for Phonetic Boosting
+
+- Start by analyzing recent transcripts for recurring transcription errors, especially on domain-specific, brand, or regional words (product names, customer names, localities, technical jargon) [1][2].
+- Review customer complaints or QA flagged cases that mention incorrect or missed keywords.
+- Use word frequency analysis and error reports to pinpoint high-value terms with low transcription success rates [3].
+- Consult with business stakeholders and customer support teams for a list of terms that are critical for compliance or analytics.
+
+### Frequency of Re-Identification
+
+- Review and update the boosted list quarterly, or in sync with:
+   - Product launches or feature releases.
+   - Major business/process changes (new campaigns, regulatory updates).
+   - Surge in transcription errors for particular words/phrases detected through ongoing monitoring [4].
+- Set up alerting in analytics to detect spikes in OOV (out-of-vocabulary) or low-confidence transcriptions for early intervention.
+
+### Pipeline for Phonetic Boosting
+
+#### 1. Data Collection
+- Gather call audio and corresponding initial transcripts for a defined rolling window (e.g., last 1–3 months).
+
+#### 2. Error & Keyword Analysis
+- Use automated scripts to extract word error rates, identify most frequent substitutions, deletions, and insertions [5].
+- Flag business-defined critical vocabulary and names that appear incorrectly or as low-confidence in transcripts.
+
+#### 3. Boost List Curation
+- Rank candidate words/phrases by frequency, business importance, and current error rate.
+- Curate and validate the list with stakeholders to ensure it aligns with business and compliance needs [1].
+
+#### 4. Boost Application
+- Integrate approved phrases into the phonetic boosting feature via the vendor’s API or configuration interface; assign appropriate boost weights/levels [5][6].
+
+#### 5. Monitoring and Analytics
+- Set up dashboards to track boost performance, measuring error rates for boosted words, false positives, and new issues.
+
+#### 6. Documentation & Feedback Loop
+- Document every boost cycle with rationale, affected phrases, and before/after performance summaries.
+- Schedule regular feedback sessions with business users and technical teams.
+
+### Evaluation: Pre vs Post Boost Impact
+
+- Before applying phonetic boosting, collect baseline metrics:
+   - Word Error Rate (WER), Sentence Error Rate (SER), term-specific accuracy for target words.
+   - Confidence scores per transcription instance.
+- After boosting, collect the same metrics for a comparable set of calls [2][7].
+- Statistically test for significant improvement: a reduction in WER/SER, increase in correct hits for the boosted words, and reduced OOV instances.
+- Combine automated metrics with human QA spot checks on random samples for critical phrases.
+- Document and share results with internal stakeholders, including summary tables highlighting pre/post impact.
+
+### Summary Table: Example Evaluation Metrics
+
+| Metric                | Pre-Boost | Post-Boost | Target |
+|-----------------------|-----------|------------|--------|
+| WER on boosted terms  | 18% [7]   | 10%        | ≤10%   |
+| Boosted term accuracy | 80%    | 94%       | ≥95%   |
+| False positive rate   | 5%     | 6%        | ≤7%    |
+
+***
+
+By systematizing the discovery, application, and evaluation of phonetic boosting, the process remains efficient and business-aligned, while providing stakeholders with actionable QA insights on the effectiveness of each boost cycle [1][2][7].
+
+Citations:
+[1] Best practices for Phonetics Boosting - WFO Online Library https://wfoonlinelibrary-wfoonlinedev.azurewebsites.net/V15_2/anl_PB/anl_PB_best_practices_terms_phrases.htm
+[2] Improve transcription accuracy of customer-agent calls with ... https://aws.amazon.com/blogs/machine-learning/improve-transcription-accuracy-of-customer-agent-calls-with-custom-vocabulary-in-amazon-transcribe/
+[3] Universal ASR Context-Biasing powered by GPU- ... https://arxiv.org/html/2508.07014v1
+[4] Speech to Text Data Preparation: 10 Best Practices ... https://waywithwords.net/resource/speech-to-text-data-preparation-practice/
+[5] ASR Customization Best Practices — NVIDIA Riva https://docs.nvidia.com/deeplearning/riva/archives/2-9-0/user-guide/docs/asr/asr-customizing.html
+[6] Basics of Speech Recognition and Customization of Riva ... https://docs.nvidia.com/deeplearning/riva/user-guide/docs/asr/asr-customizing.html
+[7] Performance evaluation of automatic speech recognition ... https://www.frontiersin.org/journals/signal-processing/articles/10.3389/frsip.2022.999457/pdf
+[8] The Complete Guide To Phonetic Transcription (2023) https://speakwrite.com/blog/phonetic-transcription/
+[9] Phonetic-practice based training to enhance transcription ... https://www.sciencedirect.com/science/article/pii/S2590291125005583
+[10] WFOV152PhoneticsBoostingUse... https://www.cliffsnotes.com/study-notes/17035581
+[11] 'I think that's what I heard? I'm not sure': Speech and ... https://pmc.ncbi.nlm.nih.gov/articles/PMC9796287/
+[12] Impact of Phonetics on Speaker Identity in Adversarial ... https://arxiv.org/html/2509.15437v1
+[13] Predicting phonetic transcription agreement: Insights from ... https://pmc.ncbi.nlm.nih.gov/articles/PMC2935251/
+[14] Learner training for phonetic transcription of typical and/or ... https://onlinelibrary.wiley.com/doi/10.1111/1460-6984.13126
+[15] Speech Data Selection for Efficient ASR Fine-Tuning using ... https://publications.idiap.ch/attachments/papers/2025/Rangappa_ICASSP2025_2025.pdf
+[16] Poor transcription accuracy on voice calls is a catalyst for ... https://www.observe.ai/blog/bad-voice-call-transcription-accuracy-is-a-catalyst-for-trouble
+[17] How to learn phonetic transcription (with practice! ✏️) https://www.youtube.com/watch?v=_0ZYWMnjD5o
+[18] How Automatic Speech Recognition Works: Step-by- ... https://vatis.tech/blog/how-automatic-speech-recognition-works-step-by-step-guide-to-the-asr-pipeline
+[19] Impact of Phonetics on Speaker Identity in Adversarial ... https://www.arxiv.org/pdf/2509.15437.pdf
+[20] WhisperX Automatic Speech Recognition (ASR) with Nemo ... https://learnopencv.com/automatic-speech-recognition/
+  
